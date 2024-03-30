@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alipine js code snippets</title>
+    <link href="styles.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@3.x.x/dist/alpine.min.js"></script>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script>
+      function calculatorComponent() {
+        return {
+          values: "",
+          handleUserInput(value) {
+            if (this.values.length === 0 && isNaN(value)) {
+              return;
+            }
+
+            if (
+              isNaN(this.values[this.values.length - 1]) &&
+              this.values.length > 0 &&
+              isNaN(value)
+            ) {
+              return;
+            }
+
+            this.values = this.values + String(value);
+          },
+
+          handleClear() {
+            this.values = "";
+          },
+
+          handleDelete() {
+            if (this.values === "Invalid") {
+              this.values = "";
+              return;
+            }
+            this.values = this.values.slice(0, -1);
+          },
+          handleRenderScreen() {
+            return this.values;
+          },
+
+          handleCalculate() {
+            if (this.values.length === 2) {
+              this.values = "Invalid";
+              return;
+            }
+            var tokens = this.values.match(/[+\-*/×÷]|\d+(\.\d+)?/g);
+            let result = parseInt(tokens[0]);
+            for (let i = 1; i < tokens.length; i = i + 2) {
+              const operator = tokens[i];
+              const operand = tokens[i + 1];
+
+              if (isNaN(operand)) {
+                this.values = "Invalid";
+                return;
+              }
+
+              if (operator === "+") {
+                result = result + parseInt(operand);
+              } else if (operator === "-") {
+                result = result - parseInt(operand);
+              } else if (operator === "×") {
+                result = result * parseInt(operand);
+              } else {
+                if (operand === 0) {
+                  this.values = "Invalid";
+                  return;
+                }
+                result = result / parseInt(operand);
+              }
+
+              this.values = result;
+            }
+          },
+        };
+      }
+    </script>
+  </head>
+  <body x-data="calculatorComponent()" class="calculator">
+    calculator
+    <div class="container">
+      <div class="body">
+        <div x-text="handleRenderScreen()" class="screen"></div>
+        <div class="buttons">
+          <button class="btn clear" x-on:click="handleClear()">CE</button>
+          <button class="btn divide" x-on:click="handleUserInput('÷')">
+            &divide;
+          </button>
+          <button class="btn multiply" x-on:click="handleUserInput('×')">
+            &times;
+          </button>
+          <button class="btn minus" x-on:click="handleUserInput('-')">-</button>
+          <button class="btn seven" x-on:click="handleUserInput(7)">7</button>
+          <button class="btn eight" x-on:click="handleUserInput(8)">8</button>
+          <button class="btn nine" x-on:click="handleUserInput(9)">9</button>
+          <button class="btn add" x-on:click="handleUserInput('+')">+</button>
+          <button class="btn four" x-on:click="handleUserInput(4)">4</button>
+          <button class="btn five" x-on:click="handleUserInput(5)">5</button>
+          <button class="btn six" x-on:click="handleUserInput(6)">6</button>
+          <button class="btn enter" x-on:click="handleCalculate()">
+            Enter
+          </button>
+          <button class="btn two" x-on:click="handleUserInput(2)">2</button>
+          <button class="btn three" x-on:click="handleUserInput(3)">3</button>
+          <button class="btn one" x-on:click="handleUserInput(1)">1</button>
+          <button class="btn del" x-on:click="handleDelete()">DEL</button>
+          <button class="btn zero" x-on:click="handleUserInput(0)">0</button>
+          <!-- todo: handle decimals -->
+          <!-- <button class="btn decimal" x-on:click="handleUserInput(7)">.</button> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+ 
