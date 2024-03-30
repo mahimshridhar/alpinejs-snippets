@@ -49,7 +49,7 @@
               return;
             }
             var tokens = this.values.match(/[+\-*/×÷]|\d+(\.\d+)?/g);
-            let result = parseInt(tokens[0]);
+            let result = parseFloat(tokens[0]);
             for (let i = 1; i < tokens.length; i = i + 2) {
               const operator = tokens[i];
               const operand = tokens[i + 1];
@@ -60,17 +60,17 @@
               }
 
               if (operator === "+") {
-                result = result + parseInt(operand);
+                result = result + parseFloat(operand);
               } else if (operator === "-") {
-                result = result - parseInt(operand);
+                result = result - parseFloat(operand);
               } else if (operator === "×") {
-                result = result * parseInt(operand);
+                result = result * parseFloat(operand);
               } else {
                 if (operand === 0) {
                   this.values = "Invalid";
                   return;
                 }
-                result = result / parseInt(operand);
+                result = result / parseFloat(operand);
               }
 
               this.values = result;
@@ -109,8 +109,7 @@
           <button class="btn one" x-on:click="handleUserInput(1)">1</button>
           <button class="btn del" x-on:click="handleDelete()">DEL</button>
           <button class="btn zero" x-on:click="handleUserInput(0)">0</button>
-          <!-- todo: handle decimals -->
-          <!-- <button class="btn decimal" x-on:click="handleUserInput(7)">.</button> -->
+          <button class="btn decimal" x-on:click="handleUserInput('.')">.</button>
         </div>
       </div>
     </div>
