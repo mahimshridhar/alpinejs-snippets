@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alipine js code snippets</title>
+    <style>
+      .catchTheDot .dot {
+        margin-top: 10px;
+        background-color: lightgray;
+        border-radius: 50%;
+        transition: all 0.6s ease-in-out;
+        text-align: center;
+        color: white;
+      }
+
+      .catchTheDot .timer {
+        position: absolute;
+        top: 150px;
+        left: 150px;
+        opacity: 0.1;
+        font-size: 60px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@3.x.x/dist/alpine.min.js"></script>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script>
+      function catchTheDotComponent() {
+        return {
+          score: 0,
+          interval: 0,
+          gameOver: false,
+          dotStyle: "",
+          dotBackground: "",
+          dotSize: `30px`,
+          timer: undefined,
+          intervalDuration: 1000,
+          handleMouseEnter() {
+            if (this.timer) {
+              clearInterval(this.timer);
+            }
+
+            this.intervalDuration = this.intervalDuration - this.score * 2;
+            if (!this.gameOver) {
+              this.interval = 5;
+              this.timer = setInterval(() => {
+                this.interval = this.interval - 1;
+                if (this.interval === 0) {
+                  clearInterval(this.timer);
+                  this.gameOver = true;
+                  this.interval = "Game over";
+                }
+              }, this.intervalDuration);
+              this.dotSize = `5px`;
+              setTimeout(() => {
+                this.dotSize = `30px`;
+              }, 600);
+              this.score++;
+              this.handleMoveDot();
+            }
+          },
+          handleMoveDot() {
+            const randomWidth = () => Math.random() * window.innerWidth;
+            const randomeHeight = () => Math.random() * window.innerHeight;
+
+            this.dotStyle = `translate(${randomWidth()}px, ${randomeHeight()}px)`;
+            this.dotBackground =
+              "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+          },
+        };
+      }
+    </script>
+  </head>
+  <body x-data="catchTheDotComponent()" class="catchTheDot">
+    <div x-text="interval" class="timer"></div>
+    <div
+      x-text="score"
+      :style="{ transform: dotStyle, backgroundColor: dotBackground, height: dotSize, width: dotSize }"
+      x-on:mouseenter="handleMouseEnter()"
+      class="dot"
+    ></div>
+  </body>
+</html>
+ 
